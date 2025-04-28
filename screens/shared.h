@@ -7,8 +7,8 @@ extern "C" {
 
 #include "pico.h"
 
-#define SCREENWIDTH 255 // TODO NO FUCKING IDEA
-#define SCREENHEIGHT 240 // TODO NO FUCKING IDEA
+#define SCREENWIDTH 255 // originally in i_video.h
+#define SCREENHEIGHT 240 // originally in i_video.h
 #define DOOM_WIDTH SCREENWIDTH 
 #define DOOM_HEIGHT SCREENHEIGHT
 
