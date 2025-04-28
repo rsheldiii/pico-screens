@@ -15,13 +15,14 @@
 #define DOWNSAMPLING_FACTOR 2.0
 #endif
 
-// Define these as macros instead of variable constants
-#define DOWNSAMPLED_WIDTH (SCREENWIDTH / DOWNSAMPLING_FACTOR)
-#define DOWNSAMPLED_HEIGHT (SCREENHEIGHT / DOWNSAMPLING_FACTOR)
+// Define these as macros instead of variable constants, and cast to integer types
+#define DOWNSAMPLED_WIDTH ((uint8_t)(SCREENWIDTH / DOWNSAMPLING_FACTOR))
+#define DOWNSAMPLED_HEIGHT ((uint8_t)(SCREENHEIGHT / DOWNSAMPLING_FACTOR))
 
-// Use a fixed size buffer - 128 is SCREENWIDTH/2 which should be sufficient
-#define MAX_DOWNSAMPLED_WIDTH 128
-static uint16_t buffer[MAX_DOWNSAMPLED_WIDTH];
+// Use a fixed-size buffer based on the expected result of DOWNSAMPLED_WIDTH
+// For SCREENWIDTH=256 and DOWNSAMPLING_FACTOR=2.0, this would be 128
+#define BUFFER_SIZE 128
+static uint16_t buffer[BUFFER_SIZE];
 
 void downsample_scanline(uint16_t *src, uint16_t *dest) {
     for (uint8_t x = 0; x < DOWNSAMPLED_WIDTH; x++) {
