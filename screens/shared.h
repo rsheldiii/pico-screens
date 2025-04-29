@@ -6,15 +6,23 @@ extern "C" {
 #define __SCREEN_SHARED__
 
 #include "pico.h"
+#include "../config.h"
 
-#define SCREENWIDTH 255 // originally in i_video.h
-#define SCREENHEIGHT 240 // originally in i_video.h
+// Screen dimensions - using configurable values
+#ifndef SCREENWIDTH
+#define SCREENWIDTH PICO_SCREENS_WIDTH
+#endif
+
+#ifndef SCREENHEIGHT 
+#define SCREENHEIGHT PICO_SCREENS_HEIGHT
+#endif
+
 #define DOOM_WIDTH SCREENWIDTH 
 #define DOOM_HEIGHT SCREENHEIGHT
 
-// here be some chicanery to avoid floats
+// Downsampling factor (percentage) - using configurable value
 #ifndef DOWNSAMPLING_FACTOR_OUT_OF_100
-#define DOWNSAMPLING_FACTOR_OUT_OF_100 300
+#define DOWNSAMPLING_FACTOR_OUT_OF_100 PICO_SCREENS_DOWNSAMPLING_FACTOR
 #endif
 
 #define DOWNSAMPLED_WIDTH ((SCREENWIDTH * 100 / DOWNSAMPLING_FACTOR_OUT_OF_100))
