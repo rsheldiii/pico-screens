@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.13)
 
 # Configurable options for screen dimensions and downsampling
+# this is the native size of the "screen" whatever content you are trying to display
+# on the SPI screen is. this * downsampling factor is the actual size of the screen
 option(PICO_SCREENS_WIDTH "Width of the screen in pixels" 255)
 option(PICO_SCREENS_HEIGHT "Height of the screen in pixels" 240)
 option(PICO_SCREENS_DOWNSAMPLING_FACTOR "Downsampling factor as percentage (higher = more downsampling)" 199)

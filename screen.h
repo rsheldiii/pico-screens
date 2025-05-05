@@ -5,6 +5,7 @@
 #define __SCREEN__
 
 #include "pico.h"
+#include "config.h"
 
 #ifdef __cplusplus
 extern "C" 
