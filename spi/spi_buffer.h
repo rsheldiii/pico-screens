@@ -35,6 +35,8 @@ namespace spi_buffer
         SPI_Buffer();
         ~SPI_Buffer() override;
 
+
+
         // --- Core Methods (Implement base) ---
         LineBuffer *getLineBuffer() override;
         void setLineBuffer(int line, LineBuffer *p) override;
@@ -49,6 +51,7 @@ namespace spi_buffer
         // --- Configuration Methods (Implement base) ---
         ScreenOutput::BlankSettings& getBlankSettings() override { return blankSettings_; }
         void setScanLine(bool enable) override { /* Stub */ (void)enable; }
+        void handleLine(LineBuffer *lineBuffer, int line);
 
         // --- Audio Methods (Implement base - Stubs) ---
         void setAudioFreq(int freq, int CTS, int N) override { /* Stub */ (void)freq; (void)CTS; (void)N; }
@@ -67,6 +70,7 @@ namespace spi_buffer
     private:
         void allocateBuffers(); // Add declaration
         static constexpr int N_BUFFERS = 2;
+        LineBuffer* debugCurrentLineBuffer_;
         LineBuffer lineBuffers_[N_BUFFERS];
 
         queue_t freeLineQueue_{};

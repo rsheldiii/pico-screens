@@ -57,15 +57,26 @@ void st7735_128_128_initScreen(void) {
     //     blit(x,y,1,1, data);
     // }
     // initialize 128 pixel row to blue
-    uint16_t white_row[LCD_WIDTH];
+    uint16_t lcd_row[LCD_WIDTH];
 
     // fill blue row with 0b0001111100000000
     for (uint8_t i = 0; i < LCD_WIDTH; i++) {
-        white_row[i] = 0b1111111111111111;
+        lcd_row[i] = 0b1111111111111111;
     }
 
     for(uint8_t y = 0; y < LCD_HEIGHT; y++) {
-        blit(0, y, LCD_WIDTH, 1, white_row);
+        blit(0, y, LCD_WIDTH, 1, lcd_row);
+    }
+
+    sleep_ms(500);
+
+    // fill blue row with 0b0001111100000000
+    for (uint8_t i = 0; i < LCD_WIDTH; i++) {
+        lcd_row[i] = 0b0001111100000000;
+    }
+
+    for(uint8_t y = 0; y < LCD_HEIGHT; y++) {
+        blit(0, y, LCD_WIDTH, 1, lcd_row);
     }
 
     sleep_ms(500);

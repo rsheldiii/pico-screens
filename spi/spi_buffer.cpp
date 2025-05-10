@@ -12,6 +12,7 @@
 #include "hardware/timer.h"
 #include <hardware/clocks.h>
 
+
 namespace spi_buffer
 {
     static SPI_Buffer *irqInstance_ = nullptr;
@@ -29,7 +30,7 @@ namespace spi_buffer
         frameCounter_ = 0;
         queue_init(&freeLineQueue_, sizeof(LineBuffer*), N_BUFFERS);
         queue_init(&validLineQueue_, sizeof(ValidLineEntry), N_BUFFERS);
-
+        debugCurrentLineBuffer_ = new LineBuffer(PICO_SCREENS_WIDTH);
         allocateBuffers();
         I_initScreen();
 
@@ -69,16 +70,18 @@ namespace spi_buffer
     SPI_Buffer::LineBuffer *
     SPI_Buffer::getLineBuffer()
     {
-        LineBuffer* p = nullptr;
-        queue_remove_blocking(&freeLineQueue_, &p);
-        return p;
+        return debugCurrentLineBuffer_;
+        // LineBuffer* p = nullptr;
+        // queue_remove_blocking(&freeLineQueue_, &p);
+        // return p;
     }
 
     void
     SPI_Buffer::setLineBuffer(int line, LineBuffer *p)
     {
         ValidLineEntry entry = {line, p};
-        queue_add_blocking(&validLineQueue_, &entry);
+        handleLine(p, line);
+        // queue_add_blocking(&validLineQueue_, &entry);
     }
 
     void
@@ -124,6 +127,23 @@ namespace spi_buffer
         }
     }
 
+    void SPI_Buffer::handleLine(LineBuffer *lineBuffer, int line)
+    {
+        int displayLine = line; // - blankSettings_.top;
+
+        if (displayLine == 0) {
+            I_handleFrameStart(frameCounter_);
+        }
+
+        if (displayLine >= 0 && displayLine < PICO_SCREENS_HEIGHT) {
+            I_handleScanline(lineBuffer->data(), displayLine);
+        }
+
+        if (displayLine == PICO_SCREENS_HEIGHT - 1) {
+            I_handleFrameEnd(frameCounter_++);
+        }
+    }
+
     void SPI_Buffer::irqHandler()
     {
         if (!started_ || !queue_get_level(&validLineQueue_)) {
@@ -136,19 +156,7 @@ namespace spi_buffer
             int line = item.line;
             currentLineBuffer_ = item.buffer;
 
-            int displayLine = line - blankSettings_.top;
-
-            if (displayLine == 0) {
-                I_handleFrameStart(frameCounter_);
-            }
-
-            if (displayLine >= 0 && displayLine < PICO_SCREENS_HEIGHT) {
-                 I_handleScanline(currentLineBuffer_->data(), displayLine);
-            }
-
-            if (displayLine == PICO_SCREENS_HEIGHT - 1) {
-                I_handleFrameEnd(frameCounter_++);
-            }
+            handleLine(currentLineBuffer_, line);
 
             queue_add_blocking(&freeLineQueue_, &currentLineBuffer_);
             currentLineBuffer_ = nullptr;
