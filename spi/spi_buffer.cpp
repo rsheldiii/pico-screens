@@ -45,7 +45,7 @@ namespace spi_buffer
     SPI_Buffer::~SPI_Buffer()
     {
         stop();
-        unregisterIRQThisCore();
+        // unregisterIRQThisCore();
         irqInstance_ = nullptr;
         queue_free(&freeLineQueue_);
         queue_free(&validLineQueue_);
@@ -113,7 +113,7 @@ namespace spi_buffer
         if (!started_)
         {
             frameCounter_ = 0;
-            registerIRQThisCore();
+            // registerIRQThisCore();
             started_ = true;
         }
     }
@@ -122,7 +122,7 @@ namespace spi_buffer
     {
         if (started_)
         {
-            unregisterIRQThisCore();
+            // unregisterIRQThisCore();
             started_ = false;
         }
     }
