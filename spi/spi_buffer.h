@@ -35,8 +35,6 @@ namespace spi_buffer
         SPI_Buffer();
         ~SPI_Buffer() override;
 
-
-
         // --- Core Methods (Implement base) ---
         LineBuffer *getLineBuffer() override;
         void setLineBuffer(int line, LineBuffer *p) override;
@@ -69,7 +67,7 @@ namespace spi_buffer
 
     private:
         void allocateBuffers(); // Add declaration
-        static constexpr int N_BUFFERS = 2;
+        static constexpr int N_BUFFERS = 10;
         LineBuffer* debugCurrentLineBuffer_;
         LineBuffer lineBuffers_[N_BUFFERS];
 

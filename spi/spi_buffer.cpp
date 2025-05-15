@@ -45,7 +45,7 @@ namespace spi_buffer
     SPI_Buffer::~SPI_Buffer()
     {
         stop();
-        // unregisterIRQThisCore();
+        unregisterIRQThisCore();
         irqInstance_ = nullptr;
         queue_free(&freeLineQueue_);
         queue_free(&validLineQueue_);
@@ -70,18 +70,18 @@ namespace spi_buffer
     SPI_Buffer::LineBuffer *
     SPI_Buffer::getLineBuffer()
     {
-        return debugCurrentLineBuffer_;
-        // LineBuffer* p = nullptr;
-        // queue_remove_blocking(&freeLineQueue_, &p);
-        // return p;
+        // return debugCurrentLineBuffer_;
+        LineBuffer* p = nullptr;
+        queue_remove_blocking(&freeLineQueue_, &p);
+        return p;
     }
 
     void
     SPI_Buffer::setLineBuffer(int line, LineBuffer *p)
     {
         ValidLineEntry entry = {line, p};
-        handleLine(p, line);
-        // queue_add_blocking(&validLineQueue_, &entry);
+        // handleLine(p, line);
+        queue_add_blocking(&validLineQueue_, &entry);
     }
 
     void
